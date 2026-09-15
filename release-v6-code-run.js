@@ -1,1 +1,1 @@
-(0,eval)((window.__COSMIC_V6_CODE||[]).join(''));window.__COSMIC_V6_CODE=[];
+const __cosmicV6=(window.__COSMIC_V6_CODE||[]).join('').replace("Math.sin(e.t*3)","Math.sin(e.phase*3)");(0,eval)(__cosmicV6);window.__COSMIC_V6_CODE=[];
