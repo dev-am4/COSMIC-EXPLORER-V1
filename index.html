@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#101733">
-<meta name="description" content="COSMIC EXPLORER V4 — cartoon space arcade exhibition game">
-<title>COSMIC EXPLORER V4</title>
-<link rel="stylesheet" href="/styles-v4.css">
-<script src="/app-v4.js" defer></script>
+<meta name="description" content="COSMIC EXPLORER V5 — continuous cartoon space combat exhibition game">
+<title>COSMIC EXPLORER V5</title>
+<link rel="stylesheet" href="/styles-v5.css">
+<script src="/app-v5.js" defer></script>
 </head>
 <body>
 <div id="gameApp" class="game-app">
   <header class="arcade-head">
-    <button id="brandHome" class="brand" type="button"><span class="planet-logo">🪐</span><span><b>COSMIC EXPLORER</b><small>GALACTIC ARCADE · V4</small></span></button>
+    <button id="brandHome" class="brand" type="button"><span class="planet-logo">🪐</span><span><b>COSMIC EXPLORER</b><small>GALACTIC COMBAT · V5</small></span></button>
     <div class="head-actions"><button id="soundToggle" class="round-btn" type="button">🔊</button><button id="operatorOpen" class="mini-btn" type="button">OPERATOR</button></div>
   </header>
 
@@ -20,17 +20,17 @@
     <section id="screenHome" class="screen active">
       <div class="hero-game">
         <div class="hero-copy">
-          <span class="arcade-tag">🚀 CONTINUOUS SPACE ADVENTURE</span>
-          <h1>ยิง ฝ่า หลบ<br><em>สำรวจจักรวาล</em></h1>
-          <p>ขับยาน 4 ทิศ เร่ง–ผ่อนความเร็ว ยิงยานเอเลี่ยน เก็บอาวุธและของพิเศษ ถ้ายานพังหรือพลังงานหมด ใช้ความรู้วิทยาศาสตร์กู้ยานแล้วไปต่อ</p>
+          <span class="arcade-tag">🚀 CONTINUOUS GALACTIC COMBAT</span>
+          <h1>บินเร็ว ยิงมันส์<br><em>ไปต่อไม่หยุด</em></h1>
+          <p>บังคับยานอิสระ 4 ทิศ ยิงเอเลี่ยนที่เข้ามาประจำพื้นที่รบ ต่อสู้ Boss เปิดเส้นทางดาวถัดไป และใช้ Science Rescue เมื่อยานเสียหายหรือพลังงานหมด</p>
           <div class="hero-actions"><button id="startGame" class="arcade-btn primary" type="button">▶ START EXPEDITION</button><button id="chooseShip" class="arcade-btn" type="button">เลือกยาน</button></div>
-          <div class="feature-pills"><span>🔫 SHOOT</span><span>👾 ALIENS</span><span>⚡ POWER UPS</span><span>🧠 RESCUE QUIZ</span></div>
+          <div class="feature-pills"><span>🔫 HOLD FIRE</span><span>👾 ENEMIES STAY & FIGHT</span><span>👑 BOSS</span><span>💥 SPECIAL WEAPON</span><span>🧠 RESCUE QUIZ</span></div>
         </div>
         <div class="hero-art" aria-hidden="true"><div class="toon-earth"></div><div class="toon-ship"><i></i></div><div class="toon-alien one">👾</div><div class="toon-alien two">🛸</div><div class="pew p1"></div><div class="pew p2"></div></div>
       </div>
       <div class="home-panels">
-        <section class="card"><h3>วิธีเล่น</h3><div class="how-grid"><div>⬅️➡️<b>ซ้าย / ขวา</b></div><div>⬆️⬇️<b>ขึ้น / ลง</b></div><div>🔫<b>ยิง</b></div><div>⚡<b>Boost</b></div></div></section>
-        <section class="card"><h3>เส้นทาง</h3><div id="routePreview" class="route-preview"></div></section>
+        <section class="card"><h3>วิธีเล่น</h3><div class="how-grid"><div>⬅️➡️⬆️⬇️<b>บิน 4 ทิศ</b></div><div>🔫<b>ยิงค้าง</b></div><div>⚡<b>Boost</b></div><div>💥<b>Special</b></div></div></section>
+        <section class="card"><h3>เส้นทางต่อเนื่อง</h3><div id="routePreview" class="route-preview"></div></section>
         <section class="card"><h3>สถิติในเครื่อง</h3><div id="leaderboard" class="leaderboard"></div></section>
       </div>
     </section>
@@ -38,13 +38,15 @@
     <section id="screenSetup" class="screen">
       <div class="setup-head"><div><span class="arcade-tag">SELECT SPACECRAFT</span><h2>เลือกยานของคุณ</h2></div><button id="setupBack" class="arcade-btn small" type="button">กลับ</button></div>
       <div id="shipCards" class="ship-cards"></div>
-      <div class="setup-footer"><div><small>เริ่มจาก</small><strong id="startSectorLabel">EARTH ORBIT</strong></div><button id="launchGame" class="arcade-btn primary" type="button">🚀 LAUNCH</button></div>
+      <div class="setup-footer"><div><small>โหมด</small><strong>EARTH → MOON → MARS → BLACK HOLE แบบไม่หยุดเกม</strong></div><button id="launchGame" class="arcade-btn primary" type="button">🚀 LAUNCH</button></div>
     </section>
 
     <section id="screenGame" class="screen game-screen">
+      <div class="route-strip" id="routeStrip"></div>
       <div class="hud-row">
         <div class="hud-box sector"><small>SECTOR</small><b id="hudSector">EARTH</b></div>
         <div class="hud-box"><small>SCORE</small><b id="hudScore">0</b></div>
+        <div class="hud-box"><small>THREAT</small><b id="hudThreat">1.0</b></div>
         <div class="hud-box"><small>COMBO</small><b id="hudCombo">x1</b></div>
         <div class="hud-box meterbox"><small>ENERGY</small><b id="hudFuel">100%</b><i><span id="fuelBar"></span></i></div>
         <div class="hud-box meterbox"><small>HULL</small><b id="hudHull">100%</b><i class="hull"><span id="hullBar"></span></i></div>
@@ -59,8 +61,9 @@
               <div class="brief-card"><span class="arcade-tag">MISSION BRIEFING</span><h2 id="briefTitle">วงโคจรโลก</h2><p id="briefText"></p><div class="brief-goal" id="briefGoal"></div><button id="briefStart" class="arcade-btn primary" type="button">พร้อม · 3 2 1 GO!</button></div>
             </div>
             <div id="countOverlay" class="overlay hidden count"><strong id="countValue">3</strong></div>
-            <div id="sectorOverlay" class="overlay hidden sector-transition"><span>SECTOR CLEARED</span><strong id="sectorTitle">MOON ROUTE</strong><small id="sectorSub">กำลัง Warp ไปพื้นที่ถัดไป</small></div>
-            <div id="waveBanner" class="wave-banner hidden"><small>ALIEN WAVE</small><strong id="waveTitle">SCOUT ATTACK!</strong></div>
+            <div id="sectorNotice" class="sector-notice hidden"><small>NOW ENTERING</small><strong id="sectorNoticeTitle">MOON ROUTE</strong><span id="sectorNoticeSub">Threat Level เพิ่มขึ้น</span></div>
+            <div id="bossBanner" class="boss-banner hidden"><small>WARNING</small><strong id="bossBannerTitle">ALIEN COMMANDER</strong></div>
+            <div id="waveBanner" class="wave-banner hidden"><small>ALIEN WAVE</small><strong id="waveTitle">REINFORCEMENTS!</strong></div>
             <div id="pickupToast" class="pickup-toast"></div>
             <div id="damageFlash" class="damage-flash"></div>
             <div id="rescueOverlay" class="overlay hidden rescue-overlay">
@@ -76,8 +79,9 @@
               <button id="moveRight" type="button">▶</button>
             </div>
             <div class="action-pad">
-              <button id="reverseBtn" class="action reverse" type="button"><span>REVERSE</span><b>⏬</b></button>
+              <button id="reverseBtn" class="action reverse" type="button"><span>BRAKE</span><b>⏬</b></button>
               <button id="shootBtn" class="action shoot" type="button"><span>FIRE</span><b>●</b></button>
+              <button id="specialBtn" class="action special" type="button"><span id="specialLabel">SPECIAL</span><b>💥</b><small id="specialAmmo">0</small></button>
               <button id="boostBtn" class="action boost" type="button"><span>BOOST</span><b>⚡</b></button>
             </div>
           </div>
@@ -85,20 +89,37 @@
 
         <aside class="side-panel">
           <section class="side-card"><span class="arcade-tag">WEAPON</span><h3 id="weaponName">PULSE CANNON</h3><div class="weapon-level" id="weaponLevel">LV.1</div><p id="weaponDesc">ยิงพลังงานตรงไปข้างหน้า</p></section>
-          <section class="side-card"><span class="arcade-tag">POWER UPS</span><div id="powerList" class="power-list"></div></section>
-          <section class="side-card"><span class="arcade-tag">OBJECTIVE</span><b id="objectiveText">Data 0/6 · Alien 0/4</b><p id="eventText">เดินทางต่อเนื่องและระวัง Alien Wave</p></section>
+          <section class="side-card"><span class="arcade-tag">SPECIAL</span><h3 id="specialName">NO SPECIAL</h3><p id="specialDesc">ยิงเอเลี่ยนเพื่อหา Missile / Bomb / Laser</p></section>
+          <section class="side-card"><span class="arcade-tag">BATTLE STATUS</span><div id="powerList" class="power-list"></div></section>
+          <section class="side-card"><span class="arcade-tag">OBJECTIVE</span><b id="objectiveText">Data 0/6 · Alien 0/6</b><p id="eventText">ศัตรูจะอยู่สู้จนกว่าจะถูกทำลาย</p></section>
           <button id="endRun" class="arcade-btn danger full" type="button">จบ Expedition</button>
         </aside>
       </div>
     </section>
 
     <section id="screenReport" class="screen">
-      <div class="report-card"><span class="arcade-tag">EXPEDITION REPORT</span><h2 id="reportTitle">MISSION COMPLETE!</h2><strong id="reportScore">0</strong><div class="report-grid"><div><small>SECTORS</small><b id="reportSectors">0</b></div><div><small>ALIENS</small><b id="reportKills">0</b></div><div><small>RESCUES</small><b id="reportRescues">0</b></div><div><small>BEST COMBO</small><b id="reportCombo">x1</b></div><div><small>POWER UPS</small><b id="reportPowers">0</b></div></div><div class="report-actions"><button id="reportHome" class="arcade-btn" type="button">หน้าแรก</button><button id="reportReplay" class="arcade-btn primary" type="button">เล่นอีกครั้ง</button></div></div>
+      <div class="report-card"><span class="arcade-tag">EXPEDITION REPORT</span><h2 id="reportTitle">MISSION COMPLETE!</h2><strong id="reportScore">0</strong><div class="report-grid"><div><small>SECTORS</small><b id="reportSectors">0</b></div><div><small>ALIENS</small><b id="reportKills">0</b></div><div><small>BOSSES</small><b id="reportBosses">0</b></div><div><small>RESCUES</small><b id="reportRescues">0</b></div><div><small>BEST COMBO</small><b id="reportCombo">x1</b></div><div><small>POWER UPS</small><b id="reportPowers">0</b></div></div><div class="report-actions"><button id="reportHome" class="arcade-btn" type="button">หน้าแรก</button><button id="reportReplay" class="arcade-btn primary" type="button">เล่นอีกครั้ง</button></div></div>
     </section>
   </main>
 
   <div id="operatorPin" class="modal hidden"><div class="backdrop" data-close-pin></div><section class="modal-card"><span class="arcade-tag">OPERATOR ACCESS</span><h2>PIN</h2><input id="pinInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••"><p id="pinError"></p><div><button id="pinCancel" class="arcade-btn small" type="button">ยกเลิก</button><button id="pinSubmit" class="arcade-btn primary small" type="button">เข้า</button></div></section></div>
-  <div id="operatorModal" class="modal hidden"><div class="backdrop" data-close-operator></div><section class="operator-card"><div class="operator-head"><div><span class="arcade-tag">EXHIBITION CONTROL</span><h2>Operator Console</h2></div><button id="operatorClose" class="round-btn" type="button">✕</button></div><div class="settings-grid"><label>Difficulty<select id="difficultySelect"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select></label><label>Volume<div class="range"><input id="volumeRange" type="range" min="0" max="100" step="5"><b id="volumeValue">70%</b></div></label><label>Attract Mode<div class="range"><input id="idleRange" type="range" min="15" max="180" step="5"><b id="idleValue">45s</b></div></label><label>Operator PIN<input id="pinChange" type="password" inputmode="numeric" maxlength="8" placeholder="4–8 digits"></label></div><div class="operator-actions"><button id="resetScores" class="arcade-btn danger small" type="button">ล้างคะแนน</button><button id="operatorSave" class="arcade-btn primary small" type="button">บันทึก</button></div></section></div>
+  <div id="operatorModal" class="modal hidden"><div class="backdrop" data-close-operator></div><section class="operator-card"><div class="operator-head"><div><span class="arcade-tag">EXHIBITION BALANCE LAB</span><h2>Operator Tuning</h2><p>ปรับค่าระหว่างเทสหน้างาน แล้วกดบันทึก เกมรอบถัดไปใช้ค่าทันที</p></div><button id="operatorClose" class="round-btn" type="button">✕</button></div>
+    <div class="settings-grid tuning-grid">
+      <label>Preset<select id="difficultySelect"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option><option value="custom">Custom</option></select><small>เลือก Preset หรือปรับ Slider เอง</small></label>
+      <label>Player Speed <b id="playerSpeedValue">1.25x</b><input id="playerSpeedRange" type="range" min="80" max="180" step="5"></label>
+      <label>Enemy Spawn <b id="spawnValue">1.00x</b><input id="spawnRange" type="range" min="50" max="180" step="5"></label>
+      <label>Enemy Max <b id="enemyMaxValue">12</b><input id="enemyMaxRange" type="range" min="4" max="24" step="1"></label>
+      <label>Enemy HP <b id="enemyHpValue">1.00x</b><input id="enemyHpRange" type="range" min="60" max="220" step="5"></label>
+      <label>Enemy Fire Rate <b id="enemyFireValue">1.00x</b><input id="enemyFireRange" type="range" min="50" max="200" step="5"></label>
+      <label>Enemy Damage <b id="enemyDamageValue">1.00x</b><input id="enemyDamageRange" type="range" min="50" max="200" step="5"></label>
+      <label>Boss HP <b id="bossHpValue">1.00x</b><input id="bossHpRange" type="range" min="60" max="250" step="5"></label>
+      <label>Progress Speed <b id="progressValue">1.00x</b><input id="progressRange" type="range" min="60" max="160" step="5"></label>
+      <label>Volume <b id="volumeValue">70%</b><input id="volumeRange" type="range" min="0" max="100" step="5"></label>
+      <label>Attract Mode <b id="idleValue">60s</b><input id="idleRange" type="range" min="15" max="180" step="5"></label>
+      <label>Operator PIN<input id="pinChange" type="password" inputmode="numeric" maxlength="8" placeholder="4–8 digits"></label>
+    </div>
+    <div class="operator-actions"><button id="resetBalance" class="arcade-btn small" type="button">คืนค่ามาตรฐาน</button><button id="resetScores" class="arcade-btn danger small" type="button">ล้างคะแนน</button><button id="operatorSave" class="arcade-btn primary small" type="button">บันทึก Balance</button></div>
+  </section></div>
   <div id="toast" class="toast"></div>
 </div>
 </body>
