@@ -173,4 +173,5 @@ code=code.replace("ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y); ctx.ro
 code=code.replace("drawBackground();\n    const p=state.player;\n    ctx.save(); if(state.shake>0) ctx.translate((Math.random()-.5)*state.shake,(Math.random()-.5)*state.shake);\n    if(!p) return;","drawBackground(); drawV11BackgroundFx(); const p=state.player; if(!p) return; ctx.save(); if(state.shake>0) ctx.translate((Math.random()-.5)*state.shake,(Math.random()-.5)*state.shake);");
 code=code.replace("ctx.restore();\n    if(state.flash>0){", "ctx.restore(); drawV11OverlayFx();\n    if(state.flash>0){");
 
-(0,eval)(code);}catch(e){console.error('V11 boot failed',e);document.body.dataset.v11BootError='1';}})();
+if(typeof window.__V11_PHASE2_PATCH==='function') code=window.__V11_PHASE2_PATCH(code);
+(0,eval)(code);}catch(e){console.error('V11.2 boot failed',e);document.body.dataset.v11BootError='1';}})();
