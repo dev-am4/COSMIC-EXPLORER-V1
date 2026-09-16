@@ -3,143 +3,102 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#101733">
-<meta name="description" content="COSMIC EXPLORER V8 — true fullscreen cartoon combat arcade">
-<title>COSMIC EXPLORER V8</title>
-<link rel="stylesheet" href="/styles-v5.css">
-<link rel="stylesheet" href="/styles-v6.css">
-<link rel="stylesheet" href="/styles-v7.css">
-<link rel="stylesheet" href="/styles-v8.css">
-<script src="/asset-players-v6.js" defer></script>
-<script src="/asset-enemies-v6-1.js" defer></script>
-<script src="/asset-enemies-v6-2.js" defer></script>
-<script src="/asset-bosses-v6-1.js" defer></script>
-<script src="/asset-bosses-v6-2.js" defer></script>
-<script src="/asset-bosses-v6-3.js" defer></script>
-<script src="/release-v6-code-01.js" defer></script>
-<script src="/release-v6-code-02.js" defer></script>
-<script src="/release-v6-code-03.js" defer></script>
-<script src="/release-v6-code-04.js" defer></script>
-<script src="/release-v6-code-05.js" defer></script>
-<script src="/release-v6-code-06.js" defer></script>
-<script src="/release-v6-code-07.js" defer></script>
-<script src="/release-v6-code-08.js" defer></script>
-<script src="/release-v6-code-run.js" defer></script>
-<script src="/v7-fx.js" defer></script>
-<script src="/v8-ui.js" defer></script>
+<meta name="theme-color" content="#040814">
+<title>COSMIC EXPLORER V9</title>
+<link rel="stylesheet" href="styles-v9.css">
 </head>
 <body>
-<div id="gameApp" class="game-app">
-  <header class="arcade-head">
-    <button id="brandHome" class="brand" type="button"><span class="planet-logo">🪐</span><span><b>COSMIC EXPLORER</b><small>TRUE FULLSCREEN COMBAT · V8</small></span></button>
-    <div class="head-actions"><button id="soundToggle" class="round-btn" type="button">🔊</button><button id="operatorOpen" class="mini-btn" type="button">OPERATOR</button></div>
-  </header>
+<div id="app">
+  <canvas id="game"></canvas>
 
-  <main>
-    <section id="screenHome" class="screen active">
-      <div class="hero-game">
-        <div class="hero-copy">
-          <span class="arcade-tag">🚀 CONTINUOUS GALACTIC COMBAT</span>
-          <h1>บินเร็ว ยิงมันส์<br><em>ไปต่อไม่หยุด</em></h1>
-          <p>บังคับยานอิสระ 4 ทิศ ยิงเอเลี่ยนที่เข้ามาประจำพื้นที่รบ ต่อสู้ Boss เปิดเส้นทางดาวถัดไป และใช้ Science Rescue เมื่อยานเสียหายหรือพลังงานหมด</p>
-          <div class="hero-actions"><button id="startGame" class="arcade-btn primary" type="button">▶ START EXPEDITION</button><button id="chooseShip" class="arcade-btn" type="button">เลือกยาน</button></div>
-          <div class="feature-pills"><span>🔫 HOLD FIRE</span><span>👾 ENEMIES STAY & FIGHT</span><span>👑 BOSS</span><span>💥 SPECIAL WEAPON</span><span>🧠 RESCUE QUIZ</span></div>
-        </div>
-        <div class="hero-art" aria-hidden="true"><div class="toon-earth"></div><div class="toon-ship"><i></i></div><div class="toon-alien one">👾</div><div class="toon-alien two">🛸</div><div class="pew p1"></div><div class="pew p2"></div></div>
+  <div id="topHud" class="panel hidden">
+    <div class="hud compact"><img id="sectorIcon" alt=""><div><div class="label">SECTOR</div><div class="value" id="sectorText">EARTH</div></div></div>
+    <div class="hud compact"><div><div class="label">SCORE</div><div class="value" id="scoreText">0</div></div></div>
+    <div class="hud compact meter"><div style="width:100%"><div class="label">HP</div><div class="value" id="hpText">100%</div><div class="bar"><div id="hpFill" class="fill hp" style="width:100%"></div></div></div></div>
+    <div class="hud compact meter"><div style="width:100%"><div class="label">ENERGY</div><div class="value" id="energyText">100%</div><div class="bar"><div id="energyFill" class="fill" style="width:100%"></div></div></div></div>
+    <div class="hud compact"><img id="specialIcon" alt=""><div><div class="label">SPECIAL</div><div class="value" id="specialText">0</div></div></div>
+    <div id="objective" class="hud compact"><div><div class="label">OBJECTIVE</div><div class="value" id="objectiveText">เคลียร์ศัตรู และปราบบอสของแต่ละดาว</div></div></div>
+  </div>
+
+  <div id="hint">สัมผัสปุ่มด้านล่าง หรือใช้ WASD / ลูกศร · Space = Special · Shift = Boost</div>
+
+  <div id="controls" class="hidden">
+    <div class="control-cluster">
+      <div class="dpad">
+        <button class="ctrl-btn" id="up">▲</button>
+        <button class="ctrl-btn" id="left">◀</button>
+        <button class="ctrl-btn" id="right">▶</button>
+        <button class="ctrl-btn" id="down">▼</button>
       </div>
-      <div class="home-panels">
-        <section class="card"><h3>วิธีเล่น</h3><div class="how-grid"><div>⬅️➡️⬆️⬇️<b>บิน 4 ทิศ</b></div><div>🔫<b>ยิงค้าง</b></div><div>⚡<b>Boost</b></div><div>💥<b>Special</b></div></div></section>
-        <section class="card"><h3>เส้นทางต่อเนื่อง</h3><div id="routePreview" class="route-preview"></div></section>
-        <section class="card"><h3>สถิติในเครื่อง</h3><div id="leaderboard" class="leaderboard"></div></section>
-      </div>
-    </section>
-
-    <section id="screenSetup" class="screen">
-      <div class="setup-head"><div><span class="arcade-tag">SELECT SPACECRAFT</span><h2>เลือกยานของคุณ</h2></div><button id="setupBack" class="arcade-btn small" type="button">กลับ</button></div>
-      <div id="shipCards" class="ship-cards"></div>
-      <div class="setup-footer"><div><small>โหมด</small><strong>EARTH → MOON → MARS → BLACK HOLE แบบไม่หยุดเกม</strong></div><button id="launchGame" class="arcade-btn primary" type="button">🚀 LAUNCH</button></div>
-    </section>
-
-    <section id="screenGame" class="screen game-screen">
-      <div class="route-strip" id="routeStrip"></div>
-      <div class="hud-row">
-        <div class="hud-box sector"><small>SECTOR</small><b id="hudSector">EARTH</b></div>
-        <div class="hud-box"><small>SCORE</small><b id="hudScore">0</b></div>
-        <div class="hud-box"><small>THREAT</small><b id="hudThreat">1.0</b></div>
-        <div class="hud-box"><small>COMBO</small><b id="hudCombo">x1</b></div>
-        <div class="hud-box meterbox"><small>ENERGY</small><b id="hudFuel">100%</b><i><span id="fuelBar"></span></i></div>
-        <div class="hud-box meterbox"><small>HULL</small><b id="hudHull">100%</b><i class="hull"><span id="hullBar"></span></i></div>
-        <div class="hud-box"><small>ALIENS</small><b id="hudKills">0</b></div>
-      </div>
-
-      <div class="game-layout">
-        <section class="arena-wrap">
-          <div id="arena" class="arena" tabindex="0">
-            <canvas id="gameCanvas"></canvas>
-            <div id="briefOverlay" class="overlay">
-              <div class="brief-card"><span class="arcade-tag">MISSION BRIEFING</span><h2 id="briefTitle">วงโคจรโลก</h2><p id="briefText"></p><div class="brief-goal" id="briefGoal"></div><button id="briefStart" class="arcade-btn primary" type="button">พร้อม · 3 2 1 GO!</button></div>
-            </div>
-            <div id="countOverlay" class="overlay hidden count"><strong id="countValue">3</strong></div>
-            <div id="sectorNotice" class="sector-notice hidden"><small>NOW ENTERING</small><strong id="sectorNoticeTitle">MOON ROUTE</strong><span id="sectorNoticeSub">Threat Level เพิ่มขึ้น</span></div>
-            <div id="bossBanner" class="boss-banner hidden"><small>WARNING</small><strong id="bossBannerTitle">ALIEN COMMANDER</strong></div>
-            <div id="waveBanner" class="wave-banner hidden"><small>ALIEN WAVE</small><strong id="waveTitle">REINFORCEMENTS!</strong></div>
-            <div id="pickupToast" class="pickup-toast"></div>
-            <div id="damageFlash" class="damage-flash"></div>
-            <div id="rescueOverlay" class="overlay hidden rescue-overlay">
-              <div class="rescue-card"><div id="rescueIcon" class="rescue-icon">🔧</div><span class="arcade-tag">SCIENCE RESCUE</span><h2 id="rescueTitle">ยานเสียหาย</h2><p id="rescueText">ตอบให้ถูกเพื่อซ่อมแล้วบินต่อ</p><div id="rescueQuestion" class="question"></div><div id="rescueAnswers" class="answers"></div><div id="rescueFeedback" class="feedback"></div></div>
-            </div>
-          </div>
-
-          <div class="touch-pad">
-            <div class="dpad">
-              <button id="moveUp" type="button">▲</button>
-              <button id="moveLeft" type="button">◀</button>
-              <button id="moveDown" type="button">▼</button>
-              <button id="moveRight" type="button">▶</button>
-            </div>
-            <div class="action-pad">
-              <button id="reverseBtn" class="action reverse" type="button"><span>BRAKE</span><b>⏬</b></button>
-              <button id="shootBtn" class="action shoot" type="button"><span>FIRE</span><b>●</b></button>
-              <button id="specialBtn" class="action special" type="button"><span id="specialLabel">SPECIAL</span><b>💥</b><small id="specialAmmo">0</small></button>
-              <button id="boostBtn" class="action boost" type="button"><span>BOOST</span><b>⚡</b></button>
-            </div>
-          </div>
-        </section>
-
-        <aside class="side-panel">
-          <section class="side-card"><span class="arcade-tag">WEAPON</span><h3 id="weaponName">PULSE CANNON</h3><div class="weapon-level" id="weaponLevel">LV.1</div><p id="weaponDesc">ยิงพลังงานตรงไปข้างหน้า</p></section>
-          <section class="side-card"><span class="arcade-tag">SPECIAL</span><h3 id="specialName">NO SPECIAL</h3><p id="specialDesc">ยิงเอเลี่ยนเพื่อหา Missile / Bomb / Laser</p></section>
-          <section class="side-card"><span class="arcade-tag">BATTLE STATUS</span><div id="powerList" class="power-list"></div></section>
-          <section class="side-card"><span class="arcade-tag">OBJECTIVE</span><b id="objectiveText">Data 0/6 · Alien 0/6</b><p id="eventText">ศัตรูจะอยู่สู้จนกว่าจะถูกทำลาย</p></section>
-          <button id="endRun" class="arcade-btn danger full" type="button">จบ Expedition</button>
-        </aside>
-      </div>
-    </section>
-
-    <section id="screenReport" class="screen">
-      <div class="report-card"><span class="arcade-tag">EXPEDITION REPORT</span><h2 id="reportTitle">MISSION COMPLETE!</h2><strong id="reportScore">0</strong><div class="report-grid"><div><small>SECTORS</small><b id="reportSectors">0</b></div><div><small>ALIENS</small><b id="reportKills">0</b></div><div><small>BOSSES</small><b id="reportBosses">0</b></div><div><small>RESCUES</small><b id="reportRescues">0</b></div><div><small>BEST COMBO</small><b id="reportCombo">x1</b></div><div><small>POWER UPS</small><b id="reportPowers">0</b></div></div><div class="report-actions"><button id="reportHome" class="arcade-btn" type="button">หน้าแรก</button><button id="reportReplay" class="arcade-btn primary" type="button">เล่นอีกครั้ง</button></div></div>
-    </section>
-  </main>
-
-  <div id="operatorPin" class="modal hidden"><div class="backdrop" data-close-pin></div><section class="modal-card"><span class="arcade-tag">OPERATOR ACCESS</span><h2>PIN</h2><input id="pinInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••"><p id="pinError"></p><div><button id="pinCancel" class="arcade-btn small" type="button">ยกเลิก</button><button id="pinSubmit" class="arcade-btn primary small" type="button">เข้า</button></div></section></div>
-  <div id="operatorModal" class="modal hidden"><div class="backdrop" data-close-operator></div><section class="operator-card"><div class="operator-head"><div><span class="arcade-tag">EXHIBITION BALANCE LAB</span><h2>Operator Tuning</h2><p>ปรับค่าระหว่างเทสหน้างาน แล้วกดบันทึก เกมรอบถัดไปใช้ค่าทันที</p></div><button id="operatorClose" class="round-btn" type="button">✕</button></div>
-    <div class="settings-grid tuning-grid">
-      <label>Preset<select id="difficultySelect"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option><option value="custom">Custom</option></select><small>เลือก Preset หรือปรับ Slider เอง</small></label>
-      <label>Player Speed <b id="playerSpeedValue">1.25x</b><input id="playerSpeedRange" type="range" min="80" max="180" step="5"></label>
-      <label>Enemy Spawn <b id="spawnValue">1.00x</b><input id="spawnRange" type="range" min="50" max="180" step="5"></label>
-      <label>Enemy Max <b id="enemyMaxValue">12</b><input id="enemyMaxRange" type="range" min="4" max="24" step="1"></label>
-      <label>Enemy HP <b id="enemyHpValue">1.00x</b><input id="enemyHpRange" type="range" min="60" max="220" step="5"></label>
-      <label>Enemy Fire Rate <b id="enemyFireValue">1.00x</b><input id="enemyFireRange" type="range" min="50" max="200" step="5"></label>
-      <label>Enemy Damage <b id="enemyDamageValue">1.00x</b><input id="enemyDamageRange" type="range" min="50" max="200" step="5"></label>
-      <label>Boss HP <b id="bossHpValue">1.00x</b><input id="bossHpRange" type="range" min="60" max="250" step="5"></label>
-      <label>Progress Speed <b id="progressValue">1.00x</b><input id="progressRange" type="range" min="60" max="160" step="5"></label>
-      <label>Volume <b id="volumeValue">70%</b><input id="volumeRange" type="range" min="0" max="100" step="5"></label>
-      <label>Attract Mode <b id="idleValue">60s</b><input id="idleRange" type="range" min="15" max="180" step="5"></label>
-      <label>Operator PIN<input id="pinChange" type="password" inputmode="numeric" maxlength="8" placeholder="4–8 digits"></label>
     </div>
-    <div class="operator-actions"><button id="resetBalance" class="arcade-btn small" type="button">คืนค่ามาตรฐาน</button><button id="resetScores" class="arcade-btn danger small" type="button">ล้างคะแนน</button><button id="operatorSave" class="arcade-btn primary small" type="button">บันทึก Balance</button></div>
-  </section></div>
-  <div id="toast" class="toast"></div>
+    <div class="control-cluster actions">
+      <button id="boostBtn" class="action-btn"><small>BOOST</small><b>⚡</b></button>
+      <button id="specialBtn" class="action-btn"><small>SPECIAL</small><b id="specialBtnType">🚀</b></button>
+    </div>
+  </div>
+
+  <div id="home">
+    <div class="home-card">
+      <div class="headline">
+        <div class="brand">
+          <h1>COSMIC EXPLORER V9</h1>
+          <p>เวอร์ชันจอเต็มสำหรับมือถือและนิทรรศการ ยิงออโต้ ใช้ภาพแยกชิ้นทั้งหมด ลดบอตและกระสุนศัตรูให้ควบคุมทัน</p>
+        </div>
+        <button id="soundBtn" class="btn secondary">SFX + MUSIC: ON</button>
+      </div>
+      <div class="route-icons" id="routeIcons"></div>
+      <div class="ship-select" id="shipSelect"></div>
+      <div class="info-row">
+        <div class="info-box">
+          <h3>วิธีเล่น</h3>
+          <ul>
+            <li>ยานยิงอัตโนมัติ ไม่ต้องกดยิงค้าง</li>
+            <li>เก็บ Energy / Repair / Shield / Weapon / Rocket / Bomb</li>
+            <li>กำจัดศัตรูให้ครบ แล้วบอสจะออกมา</li>
+            <li>เล่นได้ทั้งจอสัมผัส และคีย์บอร์ด</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h3>การควบคุม</h3>
+          <p>มือถือ: ปุ่มโปร่งใสด้านล่าง<br>คีย์บอร์ด: WASD หรือ ลูกศร เพื่อเคลื่อนที่ · Shift = Boost · Space = Special</p>
+        </div>
+      </div>
+      <div class="start-row">
+        <div style="opacity:.78;font-size:13px">โหมดเริ่มต้น: ศัตรูไม่เยอะเกินไป · สนามใหญ่ · เน้นการสัมผัส</div>
+        <button id="startBtn" class="btn">เริ่มเล่น</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sectorBanner" class="hidden"><div class="banner-inner"><img id="bannerImg" alt=""><div><div style="font-size:11px;opacity:.74">NOW ENTERING</div><div id="bannerText" style="font-size:20px;font-weight:900">EARTH</div></div></div></div>
+  <div id="toast" class="hidden"><div class="toast-inner"><img id="toastImg" alt=""><div id="toastText" style="font-weight:800">Pickup</div></div></div>
+  <div id="gameOver" class="hidden"><div class="over-card"><h2 id="gameOverTitle">MISSION END</h2><p id="summary"></p><button id="restartBtn" class="btn">เล่นอีกครั้ง</button></div></div>
 </div>
+<script src="assets/v9/enemy1.js"></script>
+<script src="assets/v9/enemy2.js"></script>
+<script src="assets/v9/enemy3.js"></script>
+<script src="assets/v9/enemy4.js"></script>
+<script src="assets/v9/boss1.js"></script>
+<script src="assets/v9/boss2.js"></script>
+<script src="assets/v9/boss3.js"></script>
+<script src="assets/v9/boss4.js"></script>
+<script src="assets/v9/planet-earth.js"></script>
+<script src="assets/v9/planet-moon.js"></script>
+<script src="assets/v9/planet-mars.js"></script>
+<script src="assets/v9/planet-hole.js"></script>
+<script src="assets/v9/pickup-energy.js"></script>
+<script src="assets/v9/pickup-repair.js"></script>
+<script src="assets/v9/pickup-shield.js"></script>
+<script src="assets/v9/pickup-weapon.js"></script>
+<script src="assets/v9/pickup-rocket.js"></script>
+<script src="assets/v9/pickup-bomb.js"></script>
+<script src="app-v9-01.js"></script>
+<script src="app-v9-02.js"></script>
+<script src="app-v9-03.js"></script>
+<script src="app-v9-04.js"></script>
+<script src="app-v9-05.js"></script>
+<script src="app-v9-06.js"></script>
+<script src="app-v9-07.js"></script>
+<script src="app-v9.js"></script>
 </body>
 </html>
