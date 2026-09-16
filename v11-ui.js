@@ -1,9 +1,9 @@
 (()=>{
   const SHIPS=[
-    {name:'ARCADE STAR',role:'ALL-ROUND',src:'/assets/v9/player1.webp?v=110'},
-    {name:'PINK SHUTTLE',role:'FAST',src:'/assets/v9/player2.webp?v=110'},
-    {name:'NEON ARMOR',role:'ARMOR',src:'/assets/v9/player3.webp?v=110'},
-    {name:'WHITE VIOLET',role:'BALANCED',src:'/assets/v9/player4.webp?v=110'}
+    {name:'ARCADE STAR',role:'ALL-ROUND',src:'/assets/v9/player1.webp?v=121'},
+    {name:'PINK SHUTTLE',role:'FAST',src:'/assets/v9/player2.webp?v=121'},
+    {name:'NEON ARMOR',role:'ARMOR',src:'/assets/v9/player3.webp?v=121'},
+    {name:'WHITE VIOLET',role:'BALANCED',src:'/assets/v9/player4.webp?v=121'}
   ];
   let selected=0,ready=false,touchX=0,touchY=0;
   const $=s=>document.querySelector(s);
@@ -44,7 +44,13 @@
     const cards=[...document.querySelectorAll('#shipSelect .ship-card')];
     if(cards[selected]) cards[selected].click();
     const s=SHIPS[selected],img=$('#v11ShipImg');
-    if(img){img.classList.remove('swap');void img.offsetWidth;img.src=s.src;img.classList.add('swap');}
+    if(img){
+      img.classList.remove('swap');void img.offsetWidth;
+      img.dataset.retry='0';
+      img.onerror=()=>{const n=selected+1,tries=Number(img.dataset.retry||0);if(tries<2){img.dataset.retry=String(tries+1);img.src=`/assets/v9/player${n}.webp?v=121&r=${Date.now()}`;}else if(n!==1){img.dataset.retry='0';img.src=`/assets/v9/player1.webp?v=121&r=${Date.now()}`;}};
+      img.onload=()=>{img.dataset.retry='0';};
+      img.src=s.src;img.classList.add('swap');
+    }
     if($('#v11ShipName')) $('#v11ShipName').textContent=s.name;
     if($('#v11ShipRole')) $('#v11ShipRole').textContent=s.role;
     document.querySelectorAll('.v11-dot').forEach((d,n)=>d.classList.toggle('active',n===selected));
