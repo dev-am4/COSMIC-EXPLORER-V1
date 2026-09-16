@@ -1,0 +1,8 @@
+const CACHE='cosmic-explorer-v1342';
+const SHELL=['/','/index.html','/styles-v1342.css','/v1342-patch.js','/v1342-ui.js','/assets/v9/player1.webp','/assets/v9/player2.webp','/assets/v9/player3.webp','/assets/v9/player4.webp'];
+self.addEventListener('install',event=>event.waitUntil((async()=>{const c=await caches.open(CACHE);await Promise.allSettled(SHELL.map(async p=>{try{const r=await fetch(new Request(p,{cache:'reload'}));if(r.ok)await c.put(p,r.clone())}catch(_){}}));await self.skipWaiting()})()));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{const names=await caches.keys();await Promise.all(names.filter(n=>n.startsWith('cosmic-explorer-')&&n!==CACHE).map(n=>caches.delete(n)));await self.clients.claim()})()));
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;const url=new URL(req.url);if(url.origin!==location.origin)return;const path=url.pathname;
+  if(req.mode==='navigate'){event.respondWith((async()=>{try{const r=await fetch(req);const c=await caches.open(CACHE);if(r.ok)c.put(path,r.clone());return r}catch(_){const c=await caches.open(CACHE);return(await c.match(path))||(await c.match('/index.html'))}})());return;}
+  event.respondWith((async()=>{const c=await caches.open(CACHE);const versioned=url.searchParams.has('v');let hit=await c.match(req);if(!hit&&!versioned)hit=await c.match(path);if(hit)return hit;try{const r=await fetch(req);if(r.ok){c.put(req,r.clone());if(!versioned)c.put(path,r.clone())}return r}catch(_){return hit||Response.error()}})());
+});
