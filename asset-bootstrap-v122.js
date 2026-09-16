@@ -12,7 +12,7 @@
     missingInitial.push(key);
     const src=path+'?v=122&rescue='+Date.now();
     if(document.readyState==='loading'){
-      document.write('<script src="'+src.replace(/"/g,'&quot;')+'"><\\/script>');
+      document.write('<script src="'+src.replace(/"/g,'&quot;')+'"><\/script>');
       retried.push(key);
       return;
     }
@@ -20,7 +20,6 @@
   };
   expected.forEach(([key,path])=>retry(key,path));
 
-  // Warm the four real ship files before the game builds its selector.
   const ships=[];
   for(let i=1;i<=4;i++){
     const img=new Image();img.decoding='async';img.src='/assets/v9/player'+i+'.webp?v=122';ships.push(img);
