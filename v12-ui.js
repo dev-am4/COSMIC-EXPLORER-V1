@@ -38,8 +38,12 @@
   function fullscreen(){
     const root=document.documentElement;
     if(!document.fullscreenElement){
-      (root.requestFullscreen||root.webkitRequestFullscreen)?.call(root).catch?.(()=>{});
-    }else{(document.exitFullscreen||document.webkitExitFullscreen)?.call(document);}
+      const req=root.requestFullscreen||root.webkitRequestFullscreen;
+      if(req){try{const p=req.call(root);p?.catch?.(()=>{});}catch(_){}}
+    }else{
+      const exit=document.exitFullscreen||document.webkitExitFullscreen;
+      if(exit){try{exit.call(document);}catch(_){}}
+    }
   }
 
   function build(){
@@ -78,9 +82,10 @@
     board.addEventListener('pointerdown',e=>{if(e.target===board)board.classList.add('hidden');});
 
     window.addEventListener('keydown',e=>{
-      if((e.key==='Escape'||e.key.toLowerCase()==='p')&&!$('#home')?.classList.contains('hidden')===false) return;
-      if((e.key==='Escape'||e.key.toLowerCase()==='p')&&$('#home')?.classList.contains('hidden')&&!$('#gameOver')?.classList.contains('hidden')) return;
-      if((e.key==='Escape'||e.key.toLowerCase()==='p')&&$('#home')?.classList.contains('hidden')){e.preventDefault();window.dispatchEvent(new Event('cosmic:v12-toggle-pause'));}
+      const key=e.key==='Escape'||e.key.toLowerCase()==='p';
+      if(!key) return;
+      const inGame=$('#home')?.classList.contains('hidden')&&$('#gameOver')?.classList.contains('hidden');
+      if(inGame){e.preventDefault();window.dispatchEvent(new Event('cosmic:v12-toggle-pause'));}
     });
 
     window.addEventListener('cosmic:v12-pause-state',e=>{
