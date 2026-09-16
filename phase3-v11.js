@@ -123,4 +123,12 @@
 
     return code;
   };
+
+  // app-v9 already invokes the Phase 2 patch; wrap it so Phase 3 runs immediately after Phase 2.
+  const previous=window.__V11_PHASE2_PATCH;
+  if(typeof previous==='function'&&!previous.__phase3Wrapped){
+    const wrapped=(code)=>window.__V11_PHASE3_PATCH(previous(code));
+    wrapped.__phase3Wrapped=true;
+    window.__V11_PHASE2_PATCH=wrapped;
+  }
 })();
