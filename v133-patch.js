@@ -47,7 +47,7 @@
       state.v133MoonPulse=Math.max(0,(state.v133MoonPulse||0)-dt);
       if(state.v133MechanicCD<=0){state.v133MoonPulse=1.68;state.v133MechanicCD=Math.max(2.3,4.65-ph*.52);state.shake=Math.max(state.shake,4);}
       if(state.v133MoonPulse>0&&state.v133MoonPulse<.82){
-        const dx=b.x-p.x,dy=(b.y+30)-p.y,l=Math.max(1,Math.hypot(dx,dy));let pull=(32+ph*16)*(p.boosting?.56:1);const pulse=1+Math.sin((1.68-state.v133MoonPulse)*Math.PI*5)*.18;pull*=pulse;p.x+=dx/l*pull*dt;p.y+=dy/l*pull*.58*dt;
+        const dx=b.x-p.x,dy=(b.y+30)-p.y,l=Math.max(1,Math.hypot(dx,dy));let pull=(32+ph*16)*(p.boosting ? .56 : 1);const pulse=1+Math.sin((1.68-state.v133MoonPulse)*Math.PI*5)*.18;pull*=pulse;p.x+=dx/l*pull*dt;p.y+=dy/l*pull*.58*dt;
         const mx=W<700?42:50,mb=W<700?112:72;p.x=Math.max(mx,Math.min(W-mx,p.x));p.y=Math.max(88,Math.min(H-mb,p.y));
       }
     }else if(sec===2){
@@ -61,7 +61,7 @@
     }else{
       state.v133VoidPulse=Math.max(0,(state.v133VoidPulse||0)-dt);
       if(state.v133MechanicCD<=0){state.v133VoidPulse=1.18;state.v133MechanicCD=Math.max(2.4,4.45-ph*.46);state.shake=Math.max(state.shake,5);}
-      const dx=b.x-p.x,dy=(b.y+38)-p.y,l=Math.max(1,Math.hypot(dx,dy));let pull=(10+ph*7)*(p.boosting?.52:1);if(state.v133VoidPulse>0&&state.v133VoidPulse<.72)pull*=2.35;p.x+=dx/l*pull*dt;p.y+=dy/l*pull*.52*dt;
+      const dx=b.x-p.x,dy=(b.y+38)-p.y,l=Math.max(1,Math.hypot(dx,dy));let pull=(10+ph*7)*(p.boosting ? .52 : 1);if(state.v133VoidPulse>0&&state.v133VoidPulse<.72)pull*=2.35;p.x+=dx/l*pull*dt;p.y+=dy/l*pull*.52*dt;
       const mx=W<700?42:50,mb=W<700?112:72;p.x=Math.max(mx,Math.min(W-mx,p.x));p.y=Math.max(88,Math.min(H-mb,p.y));
     }
   }
