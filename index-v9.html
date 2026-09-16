@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#040814">
+<title>COSMIC EXPLORER V9</title>
+<link rel="stylesheet" href="styles-v9.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <div id="topHud" class="panel hidden">
+    <div class="hud compact"><img id="sectorIcon" alt=""><div><div class="label">SECTOR</div><div class="value" id="sectorText">EARTH</div></div></div>
+    <div class="hud compact"><div><div class="label">SCORE</div><div class="value" id="scoreText">0</div></div></div>
+    <div class="hud compact meter"><div style="width:100%"><div class="label">HP</div><div class="value" id="hpText">100%</div><div class="bar"><div id="hpFill" class="fill hp" style="width:100%"></div></div></div></div>
+    <div class="hud compact meter"><div style="width:100%"><div class="label">ENERGY</div><div class="value" id="energyText">100%</div><div class="bar"><div id="energyFill" class="fill" style="width:100%"></div></div></div></div>
+    <div class="hud compact"><img id="specialIcon" alt=""><div><div class="label">SPECIAL</div><div class="value" id="specialText">0</div></div></div>
+    <div id="objective" class="hud compact"><div><div class="label">OBJECTIVE</div><div class="value" id="objectiveText">เคลียร์ศัตรู และปราบบอสของแต่ละดาว</div></div></div>
+  </div>
+
+  <div id="hint">สัมผัสปุ่มด้านล่าง หรือใช้ WASD / ลูกศร · Space = Special · Shift = Boost</div>
+
+  <div id="controls" class="hidden">
+    <div class="control-cluster">
+      <div class="dpad">
+        <button class="ctrl-btn" id="up">▲</button>
+        <button class="ctrl-btn" id="left">◀</button>
+        <button class="ctrl-btn" id="right">▶</button>
+        <button class="ctrl-btn" id="down">▼</button>
+      </div>
+    </div>
+    <div class="control-cluster actions">
+      <button id="boostBtn" class="action-btn"><small>BOOST</small><b>⚡</b></button>
+      <button id="specialBtn" class="action-btn"><small>SPECIAL</small><b id="specialBtnType">🚀</b></button>
+    </div>
+  </div>
+
+  <div id="home">
+    <div class="home-card">
+      <div class="headline">
+        <div class="brand">
+          <h1>COSMIC EXPLORER V9</h1>
+          <p>เวอร์ชันจอเต็มสำหรับมือถือและนิทรรศการ ยิงออโต้ ใช้ภาพแยกชิ้นทั้งหมด ลดบอตและกระสุนศัตรูให้ควบคุมทัน</p>
+        </div>
+        <button id="soundBtn" class="btn secondary">SFX + MUSIC: ON</button>
+      </div>
+      <div class="route-icons" id="routeIcons"></div>
+      <div class="ship-select" id="shipSelect"></div>
+      <div class="info-row">
+        <div class="info-box">
+          <h3>วิธีเล่น</h3>
+          <ul>
+            <li>ยานยิงอัตโนมัติ ไม่ต้องกดยิงค้าง</li>
+            <li>เก็บ Energy / Repair / Shield / Weapon / Rocket / Bomb</li>
+            <li>กำจัดศัตรูให้ครบ แล้วบอสจะออกมา</li>
+            <li>เล่นได้ทั้งจอสัมผัส และคีย์บอร์ด</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h3>การควบคุม</h3>
+          <p>มือถือ: ปุ่มโปร่งใสด้านล่าง<br>คีย์บอร์ด: WASD หรือ ลูกศร เพื่อเคลื่อนที่ · Shift = Boost · Space = Special</p>
+        </div>
+      </div>
+      <div class="start-row">
+        <div style="opacity:.78;font-size:13px">โหมดเริ่มต้น: ศัตรูไม่เยอะเกินไป · สนามใหญ่ · เน้นการสัมผัส</div>
+        <button id="startBtn" class="btn">เริ่มเล่น</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sectorBanner" class="hidden"><div class="banner-inner"><img id="bannerImg" alt=""><div><div style="font-size:11px;opacity:.74">NOW ENTERING</div><div id="bannerText" style="font-size:20px;font-weight:900">EARTH</div></div></div></div>
+  <div id="toast" class="hidden"><div class="toast-inner"><img id="toastImg" alt=""><div id="toastText" style="font-weight:800">Pickup</div></div></div>
+  <div id="gameOver" class="hidden"><div class="over-card"><h2 id="gameOverTitle">MISSION END</h2><p id="summary"></p><button id="restartBtn" class="btn">เล่นอีกครั้ง</button></div></div>
+</div>
+<script src="assets/v9/enemy1.js"></script>
+<script src="assets/v9/enemy2.js"></script>
+<script src="assets/v9/enemy3.js"></script>
+<script src="assets/v9/enemy4.js"></script>
+<script src="assets/v9/boss1.js"></script>
+<script src="assets/v9/boss2.js"></script>
+<script src="assets/v9/boss3.js"></script>
+<script src="assets/v9/boss4.js"></script>
+<script src="assets/v9/planet-earth.js"></script>
+<script src="assets/v9/planet-moon.js"></script>
+<script src="assets/v9/planet-mars.js"></script>
+<script src="assets/v9/planet-hole.js"></script>
+<script src="assets/v9/pickup-energy.js"></script>
+<script src="assets/v9/pickup-repair.js"></script>
+<script src="assets/v9/pickup-shield.js"></script>
+<script src="assets/v9/pickup-weapon.js"></script>
+<script src="assets/v9/pickup-rocket.js"></script>
+<script src="assets/v9/pickup-bomb.js"></script>
+<script src="app-v9.js"></script>
+</body>
+</html>
