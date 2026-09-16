@@ -1,40 +1,60 @@
 (()=>{
   const canvas=document.getElementById('game');
   if(!canvas) return;
-  // Mobile direct-drag control: the ship follows the finger delta anywhere on the game field.
-  // This dispatches the existing keyboard controls, so game physics/bounds remain authoritative.
-  let active=false,lastX=0,lastY=0,keys={ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false};
-  const setKey=(key,on)=>{
-    if(keys[key]===on) return;
-    keys[key]=on;
-    window.dispatchEvent(new KeyboardEvent(on?'keydown':'keyup',{key,code:key,bubbles:true}));
+
+  // V10.1 mobile control: use the whole playfield as a virtual joystick.
+  // Drag direction stays active while the finger is held; release stops immediately.
+  let active=false,startX=0,startY=0,pointerId=null;
+  const held={ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false};
+  const emit=(key,on)=>{
+    if(held[key]===on) return;
+    held[key]=on;
+    window.dispatchEvent(new KeyboardEvent(on?'keydown':'keyup',{key,code:key,bubbles:true,cancelable:true}));
   };
-  const release=()=>{ Object.keys(keys).forEach(k=>setKey(k,false)); active=false; };
-  const move=(x,y)=>{
-    const dx=x-lastX,dy=y-lastY; lastX=x; lastY=y;
-    const dead=1.5;
-    setKey('ArrowLeft',dx < -dead); setKey('ArrowRight',dx > dead);
-    setKey('ArrowUp',dy < -dead); setKey('ArrowDown',dy > dead);
-    // Keep movement responsive even when finger briefly stops between touchmove frames.
-    clearTimeout(move.t); move.t=setTimeout(()=>Object.keys(keys).forEach(k=>setKey(k,false)),70);
+  const stop=()=>{
+    Object.keys(held).forEach(k=>emit(k,false));
+    active=false; pointerId=null;
   };
+  const steer=(x,y)=>{
+    const dx=x-startX,dy=y-startY;
+    const dead=10;
+    emit('ArrowLeft',dx < -dead);
+    emit('ArrowRight',dx > dead);
+    emit('ArrowUp',dy < -dead);
+    emit('ArrowDown',dy > dead);
+  };
+
+  canvas.style.touchAction='none';
+  canvas.style.webkitUserSelect='none';
   canvas.addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse') return;
-    active=true; lastX=e.clientX; lastY=e.clientY;
+    active=true; pointerId=e.pointerId; startX=e.clientX; startY=e.clientY;
     try{canvas.setPointerCapture(e.pointerId);}catch(_){}
     e.preventDefault();
   },{passive:false});
-  canvas.addEventListener('pointermove',e=>{ if(!active)return; move(e.clientX,e.clientY); e.preventDefault(); },{passive:false});
-  canvas.addEventListener('pointerup',release,{passive:false});
-  canvas.addEventListener('pointercancel',release,{passive:false});
+  canvas.addEventListener('pointermove',e=>{
+    if(!active || (pointerId!==null && e.pointerId!==pointerId)) return;
+    steer(e.clientX,e.clientY); e.preventDefault();
+  },{passive:false});
+  canvas.addEventListener('pointerup',e=>{ if(pointerId===null||e.pointerId===pointerId) stop(); e.preventDefault(); },{passive:false});
+  canvas.addEventListener('pointercancel',stop,{passive:false});
+  canvas.addEventListener('lostpointercapture',stop);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+  canvas.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
   canvas.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 
-  // Asset diagnostics + cache-busted retry for iOS/Safari if an image failed during first preload.
-  const assets=['player1','player2','player3','player4'];
-  assets.forEach(name=>{
+  // Preload real local player art before/alongside the game loader.
+  // Keep strong references so iOS Safari does not discard decoded images aggressively.
+  window.__COSMIC_PLAYER_PRELOAD=window.__COSMIC_PLAYER_PRELOAD||{};
+  ['player1','player2','player3','player4'].forEach(name=>{
     const img=new Image();
     img.decoding='async';
-    img.src=`/assets/v9/${name}.webp?v=10`;
-    img.onerror=()=>console.warn('[COSMIC] missing player asset',name,img.src);
+    img.onload=()=>{
+      window.__COSMIC_PLAYER_PRELOAD[name]=img;
+      if(img.decode) img.decode().catch(()=>{});
+    };
+    img.onerror=()=>console.error('[COSMIC V10.1] player asset failed:',name,img.src);
+    img.src=`/assets/v9/${name}.webp?v=101`;
+    window.__COSMIC_PLAYER_PRELOAD[name]=img;
   });
 })();
