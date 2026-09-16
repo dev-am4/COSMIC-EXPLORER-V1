@@ -77,16 +77,16 @@
     if(state.v13WeaponLevel>=2 && state.v13WeaponCD<=0){
       const y=p.y-p.h*.34, dmg=4+state.v13WeaponLevel*2;
       v13PlayerBullet(p.x-14,y,-72,-500,dmg,'#78efff'); v13PlayerBullet(p.x+14,y,72,-500,dmg,'#78efff');
-      if(state.v13WeaponLevel>=3){ v13PlayerBullet(p.x-24,y, -130,-470,dmg+1,'#ff7fe2',6,16); v13PlayerBullet(p.x+24,y,130,-470,dmg+1,'#ff7fe2',6,16); }
+      if(state.v13WeaponLevel>=3){ v13PlayerBullet(p.x-24,y,-130,-470,dmg+1,'#ff7fe2',6,16); v13PlayerBullet(p.x+24,y,130,-470,dmg+1,'#ff7fe2',6,16); }
       state.v13WeaponCD=state.v13WeaponLevel>=3?.23:.32;
     }
 
     state.v13DroneCD-=dt;
     if(state.v13Drone && state.v13DroneCD<=0){
-      const t=state.time||0, r=34+(state.v13DroneLevel||1)*5;
+      const t=state.time||0,r=34+(state.v13DroneLevel||1)*5;
       for(let i=0;i<(state.v13DroneLevel>=2?2:1);i++){
-        const a=t*2.6+i*Math.PI, x=p.x+Math.cos(a)*r, y=p.y+Math.sin(a)*18;
-        let target=null,best=1e9; const pool=state.boss?[state.boss,...state.enemies]:state.enemies;
+        const a=t*2.6+i*Math.PI,x=p.x+Math.cos(a)*r,y=p.y+Math.sin(a)*18;
+        let target=null,best=1e9;const pool=state.boss?[state.boss,...state.enemies]:state.enemies;
         for(const e of pool){if(!e)continue;const dx=e.x-x,dy=e.y-y,d=dx*dx+dy*dy;if(d<best){best=d;target=e;}}
         let vx=0,vy=-540;if(target){const dx=target.x-x,dy=target.y-y,len=Math.max(1,Math.hypot(dx,dy));vx=dx/len*520;vy=dy/len*520;}
         v13PlayerBullet(x,y,vx,vy,7+(state.v13DroneLevel||1)*2,'#ffd86f',6,15);
@@ -95,15 +95,15 @@
     }
 
     if(state.v13ShieldLevel>0){
-      const cap=28+state.v13ShieldLevel*24; p.shield=Math.min(cap,(p.shield||0)+dt*(2.2+state.v13ShieldLevel*1.4));
+      const cap=28+state.v13ShieldLevel*24;p.shield=Math.min(cap,(p.shield||0)+dt*(2.2+state.v13ShieldLevel*1.4));
     }
     state.v13UltimateFx=Math.max(0,(state.v13UltimateFx||0)-dt);
     state.v13MiniFlash=Math.max(0,(state.v13MiniFlash||0)-dt);
   }
 
   function drawV13Fx(){
-    if(!playing||!state.player) return;
-    const p=state.player; ctx.save();
+    if(!playing||!state.player)return;
+    const p=state.player;ctx.save();
     if(state.v13Drone){
       const t=state.time||0,r=34+(state.v13DroneLevel||1)*5,count=state.v13DroneLevel>=2?2:1;
       ctx.globalCompositeOperation='lighter';
@@ -128,14 +128,14 @@
     code=code.replace("drawV11Phase3Fx();","drawV11Phase3Fx(); drawV13Fx();");
 
     code=code.replace("state.v11DeathX=null; state.v11DeathY=null;",`state.v11DeathX=null; state.v11DeathY=null;
-    state.v13WeaponLevel=1; state.v13Drone=false; state.v13DroneLevel=0; state.v13ShieldLevel=0; state.v13UltimateCharge=0; state.v13WeaponCD=0; state.v13DroneCD=0; state.v13UltimateFx=0; state.v13LastTotalKills=0; state.v13LastBossKills=0; state.v13MiniSector=-1;`);
+    state.v13WeaponLevel=1;state.v13Drone=false;state.v13DroneLevel=0;state.v13ShieldLevel=0;state.v13UltimateCharge=0;state.v13WeaponCD=0;state.v13DroneCD=0;state.v13UltimateFx=0;state.v13LastTotalKills=0;state.v13LastBossKills=0;state.v13MiniSector=-1;`);
 
     code=code.replace("window.__COSMIC_V12={",`window.__COSMIC_V12={
       v13Upgrade:(kind)=>v13ApplyUpgrade(kind),
       v13Ultimate:()=>v13Ultimate(),`);
 
     code=code.replace("status:()=>({",`status:()=>({
-        weaponLevel:state.v13WeaponLevel||1,drone:!!state.v13Drone,droneLevel:state.v13DroneLevel||0,shieldLevel:state.v13ShieldLevel||0,
+        attract:!!state.v11Attract,weaponLevel:state.v13WeaponLevel||1,drone:!!state.v13Drone,droneLevel:state.v13DroneLevel||0,shieldLevel:state.v13ShieldLevel||0,
         shield:state.player?(state.player.shield||0):0,ultimateCharge:Math.round(state.v13UltimateCharge||0),
         eliteCount:state.enemies?state.enemies.filter(e=>e.v13Elite).length:0,miniActive:!!(state.enemies&&state.enemies.some(e=>e.v13Mini)),`);
 
