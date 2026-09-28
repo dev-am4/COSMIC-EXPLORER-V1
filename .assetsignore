@@ -1,0 +1,6 @@
+.git*
+.github/
+README.md
+vercel.json
+wrangler.jsonc
+.assetsignore
